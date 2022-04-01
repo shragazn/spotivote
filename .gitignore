@@ -11,6 +11,9 @@
 # production
 /build
 
+#temps
+/src/Components/temps
+
 # misc
 .DS_Store
 .env

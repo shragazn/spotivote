@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Login from "./Components/Login";
 import TopTracks from "./Components/TopTracks";
@@ -22,6 +22,7 @@ function App() {
   }, []);
 
   return <div>{token === "" ? <Login /> : <Swiping token={token} />}</div>;
+  // return <div>{token === "" ? <Login /> : <TopTracks token={token} />}</div>;
 }
 
 export default App;
