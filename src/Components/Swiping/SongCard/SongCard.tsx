@@ -13,6 +13,7 @@ import {
 
 type Props = {
   currentSong: Song;
+  isOnTop: boolean;
 };
 
 type Titles = {
@@ -53,12 +54,19 @@ const Title = styled.h1<Titles>`
   font-size: ${(props) => (props.isTitle ? "xx-large" : "large")};
   font-weight: ${(props) => (props.isTitle ? "bold" : "normal")};
 `;
-export default function SongCard({ currentSong }: Props) {
-  //   const [audio] = useState(new Audio(currentSong.preview_url));
-  const [isPlaying, setIsPlaying] = useState(true);
-  //   useEffect(() => {
-  //     isPlaying ? audio.pause() : audio.pause();
-  //   }, [isPlaying]);
+export default function SongCard({ currentSong, isOnTop }: Props) {
+  const [audio] = useState(new Audio(currentSong.preview_url));
+  const [isPlaying, setIsPlaying] = useState(isOnTop);
+  useEffect(() => {
+    isPlaying ? audio.play() : audio.pause();
+    return () => {
+      audio.pause();
+    };
+  }, [isPlaying]);
+
+  useEffect(() => {
+    setIsPlaying(isOnTop);
+  }, [isOnTop]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);

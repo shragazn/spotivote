@@ -56,4 +56,5 @@ export interface Song {
   track_number: number;
   type: string;
   uri: string;
+  index?: number;
 }

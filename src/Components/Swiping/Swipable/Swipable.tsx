@@ -9,7 +9,7 @@ import styled from "styled-components";
 type Props = {
   index: number;
   children?: ReactChild;
-  onTrigger?: () => void;
+  onTrigger?: (rightSwipped: boolean) => void;
   triggerDelay?: number;
 };
 
@@ -36,7 +36,7 @@ export default function Swipable({
   const indexRef = useRef(index);
 
   const [{ x, y, scale, rotation }, api] = useSpring(() => ({
-    from: { x: 0, y: 1000, scale: 0, rotation: 0 },
+    from: { x: 0, y: -1000, scale: 0, rotation: 0 },
     delay: 100 * index,
     x: 0,
     y: 10 - index * Math.log(1.1) * -200,
@@ -45,8 +45,9 @@ export default function Swipable({
   }));
 
   const bind = useDrag(
-    ({ movement: [mx], active, direction: [xDir], velocity: vx }) => {
+    ({ movement: [mx], active, direction: [xDir], velocity: vx, down }) => {
       api.start((i) => {
+        if (index != 0) return;
         let isTriggered = vx > 1;
         let x =
           !active && isTriggered
@@ -56,9 +57,10 @@ export default function Swipable({
             : 0;
         const rotation = x / 100;
         const y = 10 - index;
+        const scale = active ? 1.1 : 1;
         if (!active && isTriggered)
           setTimeout(() => {
-            onTrigger && onTrigger();
+            onTrigger && onTrigger(xDir > 0);
           }, triggerDelay || 300);
         return { x, y, rotation, scale };
       });
