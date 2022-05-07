@@ -34,13 +34,18 @@ export default function Swipable({
   triggerDelay,
 }: Props) {
   const indexRef = useRef(index);
+  const DEFAULT_VALUES = {
+    y: Math.sqrt(index + 1) * 20 - 20,
+    x: 0,
+    scale: (100 - index / 2) / 100,
+  };
 
   const [{ x, y, scale, rotation }, api] = useSpring(() => ({
     from: { x: 0, y: -1000, scale: 0, rotation: 0 },
     delay: 100 * index,
     x: 0,
-    y: 10 - index * Math.log(1.1) * -200,
-    scale: 1,
+    y: DEFAULT_VALUES.y,
+    scale: DEFAULT_VALUES.scale,
     rotation: 0,
   }));
 
@@ -56,8 +61,8 @@ export default function Swipable({
             ? mx
             : 0;
         const rotation = x / 100;
-        const y = 10 - index;
-        const scale = active ? 1.1 : 1;
+        const y = DEFAULT_VALUES.y;
+        const scale = active ? 1.1 : DEFAULT_VALUES.scale;
         if (!active && isTriggered)
           setTimeout(() => {
             onTrigger && onTrigger(xDir > 0);
@@ -72,8 +77,8 @@ export default function Swipable({
     api.start(() => {
       return {
         delay: index * 100,
-        y: 10 - index * Math.log(1.1) * -200,
-        scale: 1 - (index ^ 2) / 1000,
+        y: DEFAULT_VALUES.y,
+        scale: DEFAULT_VALUES.scale,
       };
     });
   }, [index]);

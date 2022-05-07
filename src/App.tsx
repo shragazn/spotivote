@@ -21,7 +21,12 @@ function App() {
     getToken();
   }, []);
 
-  return <div>{token === "" ? <Login /> : <Swiping token={token} />}</div>;
+  // return <div>{token === "" ? <Login /> : <Swiping token={token} />}</div>;
+  return (
+    <div>
+      <Swiping token="adss" />
+    </div>
+  );
   // return <div>{token === "" ? <Login /> : <TopTracks token={token} />}</div>;
 }
 

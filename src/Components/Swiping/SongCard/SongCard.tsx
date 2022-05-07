@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { Song } from "../../../types/Index";
+import { Song } from "../../../types/Song.d";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -10,6 +10,8 @@ import {
   faPlay,
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import TextScroller from "../../TextScroller";
+import Marquee from "react-fast-marquee";
 
 type Props = {
   currentSong: Song;
@@ -29,6 +31,8 @@ const Card = styled.div`
   align-items: center;
   box-shadow: 1px 60px 60px 0px rgb(0 4 51 / 9%);
   positioni: absolute;
+  width: 350px;
+  height: 500px;
 `;
 
 const Buttons = styled.div`
@@ -49,7 +53,7 @@ const Artwork = styled.img`
 `;
 
 const Title = styled.h1<Titles>`
-  margin: 0;
+  margin: 0 50px 0 0;
   text-align: center;
   font-size: ${(props) => (props.isTitle ? "xx-large" : "large")};
   font-weight: ${(props) => (props.isTitle ? "bold" : "normal")};
@@ -57,6 +61,13 @@ const Title = styled.h1<Titles>`
 export default function SongCard({ currentSong, isOnTop }: Props) {
   const [audio] = useState(new Audio(currentSong.preview_url));
   const [isPlaying, setIsPlaying] = useState(isOnTop);
+  const [isPlayingMarquee, setIsPlayingMarquee] = useState(true);
+  const delayLoop = () => {
+    setIsPlayingMarquee(false);
+    setTimeout(() => {
+      setIsPlayingMarquee(true);
+    }, 2000);
+  };
   useEffect(() => {
     isPlaying ? audio.play() : audio.pause();
     return () => {
@@ -77,7 +88,13 @@ export default function SongCard({ currentSong, isOnTop }: Props) {
       <Info>
         <Artwork src={currentSong.album.images[1].url} />
         <Title isTitle>{currentSong.name}</Title>
-        <Title>{currentSong.artists[0].name}</Title>
+        <Marquee
+          pauseOnHover={true}
+          onCycleComplete={delayLoop}
+          play={isPlayingMarquee}
+        >
+          <Title>{currentSong.artists[0].name}</Title>
+        </Marquee>
         <Title>{currentSong.album.name}</Title>
       </Info>
       <Buttons>

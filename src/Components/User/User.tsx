@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import React from "react";
+import { UserType } from "../../types/User.d";
 
 type Props = {
   token: string;
@@ -25,7 +27,7 @@ const Avatar = styled.img`
 `;
 
 export default function User({ token }: Props) {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<UserType>();
 
   const getUser = async () => {
     const res = await fetch("https://api.spotify.com/v1/me", {
@@ -36,18 +38,21 @@ export default function User({ token }: Props) {
       },
     });
     const json = await res.json();
-    // console.log(json);
+    console.log(json);
 
     setUser(json);
   };
 
   useEffect(() => {
-    token && getUser();
+    getUser();
   }, [token]);
-  return (
+
+  return user ? (
     <UserContainer>
-      <Avatar src={user?.images[0].url} />
+      <Avatar src={user.images[0].url} />
       <Name>{user && user.display_name}</Name>
     </UserContainer>
+  ) : (
+    <div>loading user...</div>
   );
 }
