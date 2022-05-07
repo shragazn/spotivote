@@ -23,7 +23,7 @@ const Button = styled.a`
 export default function Login({}: Props) {
   return (
     <Container>
-      <Button href="/auth/login"> Login</Button>
+      <Button href="/auth/login">Login With Spotify</Button>
     </Container>
   );
 }
